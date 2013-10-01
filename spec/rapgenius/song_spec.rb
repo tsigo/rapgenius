@@ -21,10 +21,17 @@ module RapGenius
         end
       end
 
+      describe "#lyrics" do
+        it "should be an Array of Lyric objects" do
+          subject.lyrics.should be_an Array
+          subject.lyrics.sample.should be_a Lyric
+        end
+      end
+
       describe "#annotations" do
         it "should be an Array of Annotation objects" do
           subject.annotations.should be_an Array
-          subject.annotations.first.should be_a Annotation
+          subject.annotations.sample.should be_an Annotation
         end
 
         it "should be of a valid length" do
@@ -48,7 +55,7 @@ module RapGenius
 
       it "returns an Array of Songs" do
         results.should be_an Array
-        results.first.should be_a Song
+        results.sample.should be_a Song
       end
 
       describe 'assigned attributes' do

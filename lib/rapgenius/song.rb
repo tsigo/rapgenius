@@ -52,14 +52,21 @@ module RapGenius
         split(" – ").first
     end
 
-    def annotations
-      @annotations ||= document.css('.lyrics a').map do |a|
-        Annotation.new(
-          id: a.attr('data-id').to_s,
-          song: self,
-          lyric: a.text
-        )
+    # Get all lyrics for this song
+    #
+    # Returns an Array of Lyric objects
+    def lyrics
+      @lyrics ||= document.css('.lyrics').inner_html.split(/<br\/?>/).map do |line|
+        Lyric.new(line.strip)
       end
+    end
+
+    # Get all annotated lyrics for this song
+    #
+    # Returns an Array of Annotation objects
+    def annotations
+      # Get only annotated lyrics, then map them to actual Annotation objects
+      lyrics.select { |l| l.annotated? }.map(&:annotation)
     end
   end
 end
