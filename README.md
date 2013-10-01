@@ -46,16 +46,40 @@ song.description
 # => "The non-album cut from Sean that basically blew up the Internet due to a world-beating verse by Kendrick Lamar...
 ```
 
-The `#annotations` accessor on a Song returns an array of RapGenius::Annotation
-objects corresponding to different annotated lines of the song, identified by
-their `id`.
+### Lyrics and Annotations
 
-You can look these up manually using `RapGenius::Annotation.find("id")`. You
-can grab the ID for a lyric from a RapGenius page by right clicking on an annotation, copying the shortcut and then finding the number after "http://rapgenius.com".
+You can get the full lyrics of a song by calling `#lyrics`.
+
+```ruby
+song.lyrics[0...10]
+# => ["[Produced by No I.D.]",
+#  "",
+#  "[Intro: Big Sean]",
+#  "I look up",
+#  "Yeah and I take my time, nigga",
+#  "I'mma take my time, whoa",
+#  "Power moves only, nigga",
+#  "",
+#  "[Verse 1: Big Sean]",
+#  "Boy I'm 'bout my business on business, I drink liquor on liquor"]
+# =>
+```
+
+You can check each lyric individually to see if it's annotated, and then fetch the annotation.
+
+```ruby
+song.lyrics[0].annotated?
+# => true
+
+song.lyrics[0].annotation
+# => #<RapGenius::Annotation>
+```
+
+Call `#annotations` to return *just* those lyrics having annotations.
 
 ```ruby
 song.annotations
-# => [<RapGenius::Annotation>, <RapGenius::Annotation>...]
+# => [#<RapGenius::Annotation>, #<RapGenius::Annotation>, ...]
 
 annotation = song.annotations[99]
 
@@ -65,48 +89,30 @@ annotation.lyric
 annotation.explanation
 # => "Kendrick calls out some of the biggest names in present day Hip-hop...""
 
-annotation.song == song # You can get back to the song from the annotation...
+# You can get back to the song from the annotation...
+annotation.song == song
 # => true
 
 annotation.id
 # => "2093001"
 
-annotation2 = RapGenius::Annotation.find("2093001") # Fetching directly...
+# Find an annotation directly by ID
+annotation2 = RapGenius::Annotation.find("2093001")
 
-annotation == annotations2
+annotation == annotation2
 # => true
 ```
+
+### Searching
 
 You can search for songs by artist and/or title.
 
 ```ruby
 results = RapGenius::Song.search("Big Sean Control")
-# => [#<RapGenius::Song:0x007fbe4b9195e0
-#  @artist="Big Sean (Ft. Jay Electronica & Kendrick Lamar)",
-#  @title="Control",
-#  @url="http://rapgenius.com/Big-sean-control-lyrics">,
-# #<RapGenius::Song:0x007fbe4b920f70
-#  @artist="Big Sean (Ft. Jay Electronica & Kendrick Lamar)",
-#  @title="Control (French Version)",
-#  @url="http://rapgenius.com/Big-sean-control-french-version-lyrics">,
-# #<RapGenius::Song:0x007fbe4b920958
-#  @artist="Big Sean (Ft. Crobar, Jay Electronica & Kendrick Lamar)",
-#  @title="Control (Remix) [Kendrick Diss]",
-#  @url="http://rapgenius.com/Big-sean-control-remix-kendrick-diss-lyrics">,
-# #<RapGenius::Song:0x007fbe4b920250
-#  @artist=
-#   "Sa-roc (Ft. Big Sean - No I.D., Jay Electronica, Kendrick Lamar & Sa-roc)",
-#  @title="CONTROL",
-#  @url="http://rapgenius.com/Sa-roc-control-lyrics">,
-# #<RapGenius::Song:0x007fbe4b91ff30
-#  @artist="C3",
-#  @title=
-#   "Control ( Disses Kendrick Lamar , Jay-Z, Tyler The Creator, Big Sean, Meek Mill & More )",
-#  @url=
-#   "http://rapgenius.com/C3-control-disses-kendrick-lamar-jay-z-tyler-the-creator-big-sean-meek-mill-and-more-lyrics">]
+# => [#<RapGenius::Song>, #<RapGenius::Song>, ...]
 
 results[0].description
-# => "The non-album cut from Sean that basically blew up the Internet due to a world-beating verse by Kendrick Lamar...
+# => "The non-album cut from Sean that basically blew up the Internet due to a world-beating verse by Kendrick Lamar..."
 ```
 
 ## Contributing
