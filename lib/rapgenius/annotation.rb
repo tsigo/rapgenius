@@ -16,13 +16,11 @@ module RapGenius
     end
 
     def lyric
-      @lyric ||= document.css('meta[property="rap_genius:referent"]').
-        attr('content').to_s
+      @lyric ||= meta_property('referent')
     end
 
     def explanation
-      @explanation ||= document.css('meta[property="rap_genius:body"]').
-        attr('content').to_s
+      @explanation ||= meta_property('body')
     end
 
     def song
@@ -30,8 +28,15 @@ module RapGenius
     end
 
     def song_url
-      @song_url ||= document.css('meta[property="rap_genius:song"]').
-        attr('content').to_s
+      @song_url ||= meta_property('song')
+    end
+
+    private
+
+    # Convenience method for fetching the contents of a RapGenius meta tag from
+    # the document
+    def meta_property(key)
+      document.css("meta[property=\"rap_genius:#{key}\"]").attr('content').to_s
     end
   end
 end
