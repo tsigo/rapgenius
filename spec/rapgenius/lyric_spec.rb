@@ -21,8 +21,8 @@ module RapGenius
     end
 
     describe "#annotation" do
-      it "should raise LyricError when lyric is not annotated" do
-        expect { Lyric.new(normal_line).annotation }.to raise_error(LyricError)
+      it "should return nil when not annotated" do
+        Lyric.new(normal_line).annotation.should be_nil
       end
 
       it "should return the corresponding Annotation object" do

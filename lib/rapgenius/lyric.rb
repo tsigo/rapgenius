@@ -26,12 +26,12 @@ module RapGenius
 
     # Returns the lyric's corresponding Annotation object
     #
-    # Raises LyricError if called on a lyric that isn't annotated
+    # Returns nil if lyric is not annotated
     def annotation
       if annotated?
         Annotation.new(id: @line.css('a').attr('data-id').to_s)
       else
-        raise LyricError, "Cannot call 'annotation' on an unannotated lyric"
+        nil
       end
     end
   end
